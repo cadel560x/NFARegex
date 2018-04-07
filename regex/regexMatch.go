@@ -15,9 +15,8 @@ func ToInfix(regex string) string {
 	for i, r := range regex {
 		infix = append(infix, r)
 		if (i < len(regex)-1 ) {
-			if (Specials[r] == 0) {
-				switch Specials[rune(regex[i+1])] {
-				case 0:
+			if (Specials[r] == 0) && (string(r) != "(" ) {
+				if (Specials[rune(regex[i+1])] == 0) && ( string(regex[i+1]) != ")" ) {
 					infix = append(infix, '.')
 				}
 			} 
@@ -29,9 +28,11 @@ func ToInfix(regex string) string {
 }
 
 // RegexNFA wrapper that converts infix to postfix and passes it to 'pomatch'
-func RegexNFA(infixRegex string, language string) bool {
+func RegexNFA(regexString string, language string) bool {
+	infixRegex := ToInfix(regexString)
 	postfixRegex := Intopost(infixRegex)
 
+	// Calcultaes the time elapsed by 'Pomatch' function
 	start := time.Now()
 	isMatch := Pomatch(postfixRegex, language)
 	elapsed := time.Since(start)

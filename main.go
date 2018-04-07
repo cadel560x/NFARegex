@@ -25,6 +25,8 @@ func main() {
 	fmt.Println(".    concatenation")
 	fmt.Println("|    logical OR operator")
 	
+	fmt.Println()
+
 	fmt.Print("Please enter a regular expression, e.g 'ab|c*': ")
 	regexString, err := userInput()
 	if err != nil {
