@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"./regex"
+	// "fmt"
+	// "./regex"
+	"./tests"
 )
 
 func main() {
-	
+	tests.Tests()
 }

@@ -14,3 +14,6 @@ type Nfa struct {
     initial *State
     accept *State 
 }
+
+// Specials Global map that contains the special symbols
+ var Specials = map[rune]int{'*': 10, '?': 9, '.': 8, '|': 7}

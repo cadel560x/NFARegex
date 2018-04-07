@@ -3,24 +3,42 @@ package regex
 // Shunting algorithm based on video
 // https://web.microsoftstream.com/video/bad665ee-3417-4350-9d31-6db35cf5f80d
 
-// import(
-//     "fmt"
-// )
+import(
+	"fmt"
+	"time"
+)
 
 // ToInfix Adds concatenation symbol to consecutive regular characters
 func ToInfix(regex string) string {
 	infix := []rune{}
-	for _, r := range regex {
-		
+
+	for i, r := range regex {
+		infix = append(infix, r)
+		if (i < len(regex)-1 ) {
+			if (Specials[r] == 0) {
+				switch Specials[rune(regex[i+1])] {
+				case 0:
+					infix = append(infix, '.')
+				}
+			} 
+		}
 	}
 
-	return ""
+	return string(infix)
+
 }
 
 // RegexNFA wrapper that converts infix to postfix and passes it to 'pomatch'
 func RegexNFA(infixRegex string, language string) bool {
 	postfixRegex := Intopost(infixRegex)
-	return Pomatch(postfixRegex, language)
+
+	start := time.Now()
+	isMatch := Pomatch(postfixRegex, language)
+	elapsed := time.Since(start)
+
+	fmt.Printf("Pomatch took %s\n", elapsed)
+	
+	return isMatch
 }
 
 func addState(l []*State, s *State, a *State) []*State {
@@ -35,7 +53,7 @@ func addState(l []*State, s *State, a *State) []*State {
 }
 
 // Pomatch Evaluates a string against a postfix regular expression
-func Pomatch(po string, s string) bool {	
+func Pomatch(po string, s string) bool {
 	isMatch := false
 	ponfa := PostfixRegexNFA(po)
 
