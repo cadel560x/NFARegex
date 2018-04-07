@@ -12,6 +12,7 @@ package regex
 // Intopost converts from infix notation to postfix notation
 func Intopost(infix string) string {
 	specials := map[rune]int{'*': 10, '.': 9,'|':8}
+
 	pofix, s := []rune{}, []rune{}
 
 	for _, r := range infix{
@@ -35,12 +36,11 @@ func Intopost(infix string) string {
 		}
 	}
 
+	for len(s) > 0 {
+		pofix, s = append(pofix, s[len(s)-1]), s[:len(s)-1]
+	}
 
-		for len(s) > 0 {
-			pofix, s = append(pofix, s[len(s)-1]), s[:len(s)-1]
-		}
-
-		return string(pofix)
+	return string(pofix)
 
 }
 

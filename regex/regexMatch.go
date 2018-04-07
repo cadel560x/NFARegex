@@ -7,6 +7,22 @@ package regex
 //     "fmt"
 // )
 
+// ToInfix Adds concatenation symbol to consecutive regular characters
+func ToInfix(regex string) string {
+	infix := []rune{}
+	for _, r := range regex {
+		
+	}
+
+	return ""
+}
+
+// RegexNFA wrapper that converts infix to postfix and passes it to 'pomatch'
+func RegexNFA(infixRegex string, language string) bool {
+	postfixRegex := Intopost(infixRegex)
+	return Pomatch(postfixRegex, language)
+}
+
 func addState(l []*State, s *State, a *State) []*State {
     l = append(l, s)
     if s != a && s.symbol == 0 {
@@ -44,6 +60,7 @@ func Pomatch(po string, s string) bool {
 		}
 	}
 	return isMatch
+
 }
 
 // func main(){
