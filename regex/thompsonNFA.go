@@ -3,24 +3,26 @@ package regex
 // Shunting algorithm based on video
 // https://web.microsoftstream.com/video/68a288f5-4688-4b3a-980e-1fcd5dd2a53b
 
-// import(
-//     "fmt"
-// )
+import(
+    "fmt"
+)
 
-type state struct {
+// State state data structure of NFA Atomaton
+type State struct {
     symbol rune
-    edge1 *state
-    edge2 *state
+    edge1 *State
+    edge2 *State
 }
 
-type nfa struct {
-    initial *state
-    accept *state 
+// Nfa Auxiliary data structure
+type Nfa struct {
+    initial *State
+    accept *State 
 }
 
 // PostfixRegexNFA From postfix regex to NFA
-func PostfixRegexNFA(postfix string) *nfa{
-    nfastack := []*nfa{}
+func PostfixRegexNFA(postfix string) *Nfa{
+    nfastack := []*Nfa{}
 
     for _, r := range postfix {
 
@@ -33,7 +35,7 @@ func PostfixRegexNFA(postfix string) *nfa{
 
             frag1.accept.edge1 = frag2.initial
 
-            nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept})
+            nfastack = append(nfastack, &Nfa{initial: frag1.initial, accept: frag2.accept})
             
         case '|':
             frag2 := nfastack[len(nfastack)-1]
@@ -41,33 +43,38 @@ func PostfixRegexNFA(postfix string) *nfa{
             frag1 := nfastack[len(nfastack)-1]
             nfastack = nfastack[:len(nfastack)-1]
 
-            initial := state{edge1: frag1.initial, edge2: frag2.initial}
-            accept := state{}
+            initial := State{edge1: frag1.initial, edge2: frag2.initial}
+            accept := State{}
             frag1.accept.edge1 = &accept
             frag2.accept.edge2 = &accept
             
 
-            nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
+            nfastack = append(nfastack, &Nfa{initial: &initial, accept: &accept})
         
         case '*':
             frag := nfastack[len(nfastack)-1]
             nfastack := nfastack[:len(nfastack)-1]
 
-            accept := state{}
-            initial := state{edge1: frag.initial, edge2: &accept}
+            accept := State{}
+            initial := State{edge1: frag.initial, edge2: &accept}
             frag.accept.edge1 = frag.initial
             frag.accept.edge2 = &accept
 
-            nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
+            nfastack = append(nfastack, &Nfa{initial: &initial, accept: &accept})
 
         default: 
-            accept := state{}
-            initial := state{symbol: r, edge1: &accept}
+            accept := State{}
+            initial := State{symbol: r, edge1: &accept}
 
-            nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
+            nfastack = append(nfastack, &Nfa{initial: &initial, accept: &accept})
         
-        }//switch
-    }// for
+        }
+    }
+
+    if len(nfastack) != 1 {
+		fmt.Println("Sorry more than 1 nfa found", len(nfastack), nfastack)
+    }
+    
     return nfastack[0]
 }
 
