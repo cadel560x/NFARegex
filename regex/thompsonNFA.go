@@ -1,8 +1,11 @@
-package main
+package regex
 
-import(
-    "fmt"
-)
+// Shunting algorithm based on video
+// https://web.microsoftstream.com/video/68a288f5-4688-4b3a-980e-1fcd5dd2a53b
+
+// import(
+//     "fmt"
+// )
 
 type state struct {
     symbol rune
@@ -15,7 +18,8 @@ type nfa struct {
     accept *state 
 }
 
-func postfixRegexNFA(postfix string) *nfa{
+// PostfixRegexNFA From postfix regex to NFA
+func PostfixRegexNFA(postfix string) *nfa{
     nfastack := []*nfa{}
 
     for _, r := range postfix {
@@ -67,7 +71,7 @@ func postfixRegexNFA(postfix string) *nfa{
     return nfastack[0]
 }
 
-func main(){
-    nfa := postfixRegexNFA("ab.c*|")
-    fmt.Println(nfa)
-}
+// func main(){
+//     nfa := postfixRegexNFA("ab.c*|")
+//     fmt.Println(nfa)
+// }

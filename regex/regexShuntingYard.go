@@ -1,16 +1,16 @@
-package main
+package regex
 
 
 // Shunting algorithm based on video
 // https://web.microsoftstream.com/video/9d83a3f3-bc4f-4bda-95cc-b21c8e67675e
 
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
     
-
-func intopost(infix string) string {
+// Intopost converts from infix notation to postfix notation
+func Intopost(infix string) string {
 	specials := map[rune]int{'*': 10, '.': 9,'|':8}
 	pofix, s := []rune{}, []rune{}
 
@@ -32,8 +32,8 @@ func intopost(infix string) string {
 		default:
 			pofix = append(pofix, r)
 
-		}//switch
-	}//for
+		}
+	}
 
 
 		for len(s) > 0 {
